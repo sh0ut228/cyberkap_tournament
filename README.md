@@ -1,1 +1,0 @@
-# cyberkap_tournament
