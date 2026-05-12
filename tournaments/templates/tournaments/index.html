@@ -1,0 +1,109 @@
+{% extends 'tournaments/base.html' %}
+{% load static %}
+
+{% block title %}Главная - CyberKAP Tournament{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3') no-repeat center center/cover; height: 100vh; min-height: 600px; display: flex; align-items: center; margin-top: -80px; padding-top: 80px;">
+    <div class="container text-center text-white">
+        <h1 class="display-2 fw-bold mb-4" style="font-family: 'Orbitron', sans-serif;">CYBER CHAMPIONSHIP 2024</h1>
+        <p class="lead mb-4">Крупнейший киберспортивный турнир по Counter-Strike 2 в России</p>
+        <a href="{% url 'tournaments_list' %}" class="btn btn-primary btn-lg px-5">Участвовать</a>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold" style="color: var(--accent-color);">О турнире</h2>
+            <p class="lead">CyberKAP Championship — престижные соревнования, где встречаются лучшие команды страны</p>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3>Формат проведения</h3>
+                <p>Турнир проходит в несколько этапов: онлайн-квалификации, групповой этап и плей-офф. Гранд-финал состоится на главной киберспортивной арене Москвы.</p>
+                <h3 class="mt-4">Призовой фонд</h3>
+                <p>Общий призовой фонд составляет 5 000 000 рублей. Победители получат не только денежные призы, но и контракты с ведущими организациями.</p>
+                <h3 class="mt-4">Список игр</h3>
+                <p>CS2, Dota 2, Valorant</p>
+            </div>
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3" class="img-fluid rounded shadow" alt="Турнир">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tournaments Preview -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold" style="color: var(--accent-color);">Активные турниры</h2>
+            <p>Присоединяйтесь к соревнованиям прямо сейчас</p>
+        </div>
+        <div class="row">
+            {% for tournament in tournaments %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    {% if tournament.banner %}
+                    <img src="{{ tournament.banner.url }}" class="card-img-top" alt="{{ tournament.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-dark d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-gamepad fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tournament.name }}</h5>
+                        <p class="card-text">{{ tournament.game }}</p>
+                        <p class="card-text"><small class="text-muted">{{ tournament.start_date|date:"d.m.Y" }}</small></p>
+                        <a href="{% url 'tournament_detail' tournament.id %}" class="btn btn-primary w-100">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>Активных турниров пока нет</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Winners Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold" style="color: var(--accent-color);">Победители</h2>
+            <p>Чемпионы прошлых лет</p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Год</th>
+                        <th>Турнир</th>
+                        <th>Команда</th>
+                        <th>Место</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for winner in winners %}
+                    <tr>
+                        <td>{{ winner.year }}</td>
+                        <td>{{ winner.tournament.name }}</td>
+                        <td>{{ winner.team.name }}</td>
+                        <td>{{ winner.place }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">Нет данных о победителях</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
